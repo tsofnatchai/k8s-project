@@ -1,0 +1,34 @@
+pipeline {
+    agent any
+
+    environment {
+        KUBECONFIG = "~/.kube/config"  // Update this to your Kubernetes config file path
+        HELM_RELEASE_NAME = "rmq-app"
+        HELM_CHART_PATH = "./helm"
+    }
+
+    stages {
+        stage('Checkout Helm Charts') {
+            steps {
+                git url: 'https://github.com/avielb/rmqp-example.git', branch: 'main'
+            }
+        }
+
+        stage('Connect to Kubernetes') {
+            steps {
+                script {
+                    sh "export KUBECONFIG=${KUBECONFIG}"
+                    sh "kubectl get nodes"  // Verify connection
+                }
+            }
+        }
+
+        stage('Deploy Application using Helm') {
+            steps {
+                script {
+                    sh "helm upgrade --install ${HELM_RELEASE_NAME} ${HELM_CHART_PATH} --values values.yaml"
+                }
+            }
+        }
+    }
+}

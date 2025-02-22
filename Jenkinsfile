@@ -1,25 +1,43 @@
 pipeline {
     agent any
+
+    environment {
+        REGISTRY = 'tsofnatg'
+        IMAGE_PRODUCER = 'producer'
+        IMAGE_CONSUMER = 'consumer'
+    }
+
     stages {
         stage('Clone Repository') {
             steps {
-                git 'https://github.com/avielb/rmqp-example.git'
+                git url: 'https://github.com/avielb/rmqp-example.git', branch: 'main'
             }
         }
-        stage('Build Producer & Consumer') {
+
+        stage('Build Docker Images') {
             steps {
-                sh 'docker build -t producer:latest producer/'
-                sh 'docker build -t consumer:latest consumer/'
+                script {
+                    sh "docker build -t ${REGISTRY}/${IMAGE_PRODUCER}:latest -f producer/Dockerfile ."
+                    sh "docker build -t ${REGISTRY}/${IMAGE_CONSUMER}:latest -f consumer/Dockerfile ."
+                }
             }
         }
-        stage('Push to Docker Registry') {
+
+        stage('Login to Docker Registry') {
             steps {
-                withCredentials([usernamePassword(credentialsId: 'docker-credentials-id', usernameVariable: 'DOCKER_USER', passwordVariable: 'DOCKER_PASS')]) {
-                    sh 'docker login -u $DOCKER_USER -p $DOCKER_PASS'
-                    sh 'docker tag producer:latest my-docker-repo/producer:latest'
-                    sh 'docker tag consumer:latest my-docker-repo/consumer:latest'
-                    sh 'docker push my-docker-repo/producer:latest'
-                    sh 'docker push my-docker-repo/consumer:latest'
+                script {
+                    withCredentials([string(credentialsId: 'docker-hub-credentials', variable: 'DOCKER_PASS')]) {
+                        sh "echo $DOCKER_PASS | docker login -u ${REGISTRY} --password-stdin"
+                    }
+                }
+            }
+        }
+
+        stage('Push Images to Registry') {
+            steps {
+                script {
+                    sh "docker push ${REGISTRY}/${IMAGE_PRODUCER}:latest"
+                    sh "docker push ${REGISTRY}/${IMAGE_CONSUMER}:latest"
                 }
             }
         }
