@@ -51,10 +51,10 @@ pipeline {
         }
     }
 
-    post {
-        cleanup {
-            // Remove unused Docker images to free up space
-            sh 'docker image prune -f'
-        }
-    }
+//     post {
+//         cleanup {
+//             // Remove unused Docker images to free up space
+//             sh 'docker image prune -f'
+//         }
+//     }
 }
