@@ -2,44 +2,59 @@ pipeline {
     agent any
 
     environment {
-        REGISTRY = 'tsofnatg'
-        IMAGE_PRODUCER = 'producer'
-        IMAGE_CONSUMER = 'consumer'
+        PRODUCER_IMAGE = 'tsofnatchai/producer'
+        CONSUMER_IMAGE = 'tsofnatchai/consumer'
+        REGISTRY_CREDENTIALS = 'docker-hub-credentials'
     }
 
     stages {
         stage('Clone Repository') {
             steps {
-                git url: 'https://github.com/avielb/rmqp-example.git', branch: 'main'
+                git branch: 'main', url: 'https://github.com/tsofnatchai/k8s-project.git'
             }
         }
 
-        stage('Build Docker Images') {
+        stage('Build Producer Image') {
             steps {
                 script {
-                    sh "docker build -t ${REGISTRY}/${IMAGE_PRODUCER}:latest -f producer/Dockerfile ."
-                    sh "docker build -t ${REGISTRY}/${IMAGE_CONSUMER}:latest -f consumer/Dockerfile ."
+                    docker.build("${PRODUCER_IMAGE}:latest", "./producer")
                 }
             }
         }
 
-        stage('Login to Docker Registry') {
+        stage('Build Consumer Image') {
             steps {
                 script {
-                    withCredentials([string(credentialsId: 'docker-hub-credentials', variable: 'DOCKER_PASS')]) {
-                        sh "echo $DOCKER_PASS | docker login -u ${REGISTRY} --password-stdin"
+                    docker.build("${CONSUMER_IMAGE}:latest", "./consumer")
+                }
+            }
+        }
+
+        stage('Push Producer Image') {
+            steps {
+                script {
+                    docker.withRegistry('', REGISTRY_CREDENTIALS) {
+                        docker.image("${PRODUCER_IMAGE}:latest").push()
                     }
                 }
             }
         }
 
-        stage('Push Images to Registry') {
+        stage('Push Consumer Image') {
             steps {
                 script {
-                    sh "docker push ${REGISTRY}/${IMAGE_PRODUCER}:latest"
-                    sh "docker push ${REGISTRY}/${IMAGE_CONSUMER}:latest"
+                    docker.withRegistry('', REGISTRY_CREDENTIALS) {
+                        docker.image("${CONSUMER_IMAGE}:latest").push()
+                    }
                 }
             }
+        }
+    }
+
+    post {
+        cleanup {
+            // Remove unused Docker images to free up space
+            sh 'docker image prune -f'
         }
     }
 }
