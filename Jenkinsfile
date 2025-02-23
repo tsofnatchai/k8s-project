@@ -1,6 +1,7 @@
 pipeline {
     agent any
     environment {
+        KUBECONFIG = "C:\\Users\\TsofnatChai\\.kube\\config" // Update the correct kubeconfig path on Windows
         PRODUCER_IMAGE = 'tsofnatg/producer'
         CONSUMER_IMAGE = 'tsofnatg/consumer'
         REGISTRY_CREDENTIALS = 'docker-hub-credentials'
