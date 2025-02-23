@@ -2,9 +2,9 @@ pipeline {
     agent any
 
     environment {
-        KUBECONFIG = "C:\\Users\\TsofnatChai\\.kube\\config" // Update the correct kubeconfig path on Windows
+        KUBECONFIG = "C:\\Users\\jenkins\\.kube\\config" // Update the correct kubeconfig path on Windows
         HELM_RELEASE_NAME = "my-app"
-        HELM_CHART_PATH = "./helm"
+        HELM_CHART_PATH = "./helm/my-app-chart"  // Adjusted path to the Helm chart
         RABBITMQ_RELEASE_NAME = "rabbitmq"
         RABBITMQ_CHART = "bitnami/rabbitmq"
         EXPORTER_DEPLOYMENT = "deployment.yaml"
@@ -22,7 +22,7 @@ pipeline {
             steps {
                 script {
                     bat "kubectl config view"  // Verify Kube config
-                    bat "kubectl get nodes"   // Verify connection to cluster
+                    bat "kubectl get nodes"    // Verify connection to cluster
                 }
             }
         }
@@ -30,7 +30,7 @@ pipeline {
         stage('Deploy Application using Helm') {
             steps {
                 script {
-                    bat "helm upgrade --install ${HELM_RELEASE_NAME} ${HELM_CHART_PATH} --values values.yaml"
+                    bat "helm upgrade --install ${HELM_RELEASE_NAME} ${HELM_CHART_PATH} --values ${HELM_CHART_PATH}/values.yaml"
                 }
             }
         }
