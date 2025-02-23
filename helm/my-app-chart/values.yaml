@@ -25,3 +25,5 @@ rabbitmq:
   max_queues: 0
   excludeMetrics: ""
   connection: "direct"
+serviceAccount:
+  create: true
