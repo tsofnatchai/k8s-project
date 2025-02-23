@@ -2,27 +2,54 @@ pipeline {
     agent any
 
     environment {
-        KUBECONFIG = "/var/lib/jenkins/.kube/config"
-        HELM_RELEASE_NAME = "rabbitmq"
-        HELM_CHART_REPO = "https://charts.bitnami.com/bitnami"
-        HELM_CHART_NAME = "bitnami/rabbitmq"
-        HELM_VALUES_FILE = "values.yaml"  // Optional if using custom values
+        KUBECONFIG = "C:\\Users\\jenkins\\.kube\\config" // Update the correct kubeconfig path on Windows
+        HELM_RELEASE_NAME = "my-app"
+        HELM_CHART_PATH = "./helm"
+        RABBITMQ_RELEASE_NAME = "rabbitmq"
+        RABBITMQ_CHART = "bitnami/rabbitmq"
+        EXPORTER_DEPLOYMENT = "deployment.yaml"
+        EXPORTER_SERVICE = "service.yaml"
     }
 
     stages {
-        stage('Add Helm Repo & Update') {
+        stage('Checkout Helm Charts Repository') {
+            steps {
+                git url: 'https://github.com/tsofnatchai/k8s-project.git', branch: 'main'
+            }
+        }
+
+        stage('Configure Kubernetes Access') {
             steps {
                 script {
-                    sh 'helm repo add bitnami https://charts.bitnami.com/bitnami'
-                    sh 'helm repo update'
+                    bat "kubectl config view"  // Verify Kube config
+                    bat "kubectl get nodes"   // Verify connection to cluster
                 }
             }
         }
 
-        stage('Deploy RabbitMQ with Helm') {
+        stage('Deploy Application using Helm') {
             steps {
                 script {
-                    sh "helm upgrade --install ${HELM_RELEASE_NAME} ${HELM_CHART_NAME} --values ${HELM_VALUES_FILE}"
+                    bat "helm upgrade --install ${HELM_RELEASE_NAME} ${HELM_CHART_PATH} --values values.yaml"
+                }
+            }
+        }
+
+        stage('Deploy RabbitMQ') {
+            steps {
+                script {
+                    bat "helm repo add bitnami https://charts.bitnami.com/bitnami"
+                    bat "helm repo update"
+                    bat "helm upgrade --install ${RABBITMQ_RELEASE_NAME} ${RABBITMQ_CHART}"
+                }
+            }
+        }
+
+        stage('Deploy RabbitMQ Exporter') {
+            steps {
+                script {
+                    bat "kubectl apply -f ${EXPORTER_DEPLOYMENT}"
+                    bat "kubectl apply -f ${EXPORTER_SERVICE}"
                 }
             }
         }
@@ -30,10 +57,10 @@ pipeline {
 
     post {
         success {
-            echo 'RabbitMQ Deployment Successful!'
+            echo '✅ Deployment Successful!'
         }
         failure {
-            echo 'Deployment Failed. Check logs for details.'
+            echo '❌ Deployment Failed. Check logs for details.'
         }
     }
 }
