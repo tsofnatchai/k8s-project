@@ -27,3 +27,5 @@ rabbitmq:
   connection: "direct"
 serviceAccount:
   create: true
+ingress:
+  enabled: true
