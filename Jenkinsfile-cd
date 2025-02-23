@@ -7,8 +7,8 @@ pipeline {
         HELM_CHART_PATH = "./helm/my-app-chart"  // Adjusted path to the Helm chart
         RABBITMQ_RELEASE_NAME = "rabbitmq"
         RABBITMQ_CHART = "bitnami/rabbitmq"
-        EXPORTER_DEPLOYMENT = "deployment.yaml"
-        EXPORTER_SERVICE = "service.yaml"
+        EXPORTER_DEPLOYMENT = "exporter-deployment.yaml"
+        EXPORTER_SERVICE = "exporter-service.yaml"
     }
 
     stages {
