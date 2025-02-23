@@ -2,8 +2,8 @@ pipeline {
     agent any
     environment {
         KUBECONFIG = "C:\\Users\\TsofnatChai\\.kube\\config" // Update the correct kubeconfig path on Windows
-        PRODUCER_IMAGE = 'tsofnatg/producer'
-        CONSUMER_IMAGE = 'tsofnatg/consumer'
+        PRODUCER_IMAGE = 'tsofnatchai/producer'  // Ensure the correct registry and image name
+        CONSUMER_IMAGE = 'tsofnatchai/consumer'
         REGISTRY_CREDENTIALS = 'docker-hub-credentials'
         HELM_RELEASE_NAME = "release"
         HELM_CHART_PATH = "./helm/my-app-chart"  // Adjusted path to the Helm chart
@@ -57,14 +57,14 @@ pipeline {
         stage('Deploy Producer Application') {
             steps {
                 script {
-                    bat "helm upgrade --install ${HELM_RELEASE_NAME}-producer ${HELM_CHART_PATH} --set image.repository=${PRODUCER_IMAGE}:latest --values ${HELM_CHART_PATH}/values.yaml"
+                    bat "helm upgrade --install ${HELM_RELEASE_NAME}-producer ${HELM_CHART_PATH} --set image.repository=${PRODUCER_IMAGE} --set image.tag=latest --values ${HELM_CHART_PATH}/values.yaml"
                 }
             }
         }
         stage('Deploy Consumer Application') {
             steps {
                 script {
-                    bat "helm upgrade --install ${HELM_RELEASE_NAME}-consumer ${HELM_CHART_PATH} --set image.repository=${CONSUMER_IMAGE}:latest --values ${HELM_CHART_PATH}/values.yaml"
+                    bat "helm upgrade --install ${HELM_RELEASE_NAME}-consumer ${HELM_CHART_PATH} --set image.repository=${CONSUMER_IMAGE} --set image.tag=latest --values ${HELM_CHART_PATH}/values.yaml"
                 }
             }
         }
