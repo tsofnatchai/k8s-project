@@ -2,8 +2,8 @@ pipeline {
     agent any
     environment {
         KUBECONFIG = "C:\\Users\\TsofnatChai\\.kube\\config" // Update the correct kubeconfig path on Windows
-        PRODUCER_IMAGE = 'tsofnatchai/producer'  // Ensure the correct registry and image name
-        CONSUMER_IMAGE = 'tsofnatchai/consumer'
+        PRODUCER_IMAGE = 'tsofnatg/producer'
+        CONSUMER_IMAGE = 'tsofnatg/consumer'
         REGISTRY_CREDENTIALS = 'docker-hub-credentials'
         HELM_RELEASE_NAME = "release"
         HELM_CHART_PATH = "./helm/my-app-chart"  // Adjusted path to the Helm chart
