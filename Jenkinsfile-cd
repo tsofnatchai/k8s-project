@@ -2,7 +2,7 @@ pipeline {
     agent any
 
     environment {
-        KUBECONFIG = "C:\\Users\\jenkins\\.kube\\config" // Update the correct kubeconfig path on Windows
+        KUBECONFIG = "C:\\Users\\TsofnatChai\\.kube\\config" // Update the correct kubeconfig path on Windows
         HELM_RELEASE_NAME = "my-app"
         HELM_CHART_PATH = "./helm"
         RABBITMQ_RELEASE_NAME = "rabbitmq"
