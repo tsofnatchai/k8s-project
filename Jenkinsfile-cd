@@ -3,8 +3,8 @@ pipeline {
 
     environment {
         KUBECONFIG = "C:\\Users\\TsofnatChai\\.kube\\config" // Update the correct kubeconfig path on Windows
-        HELM_RELEASE_NAME = "my-app"
-        HELM_CHART_PATH = "./helm/my-app-chart"  // Adjusted path to the Helm chart
+        HELM_RELEASE_NAME = "my-realease"
+        HELM_CHART_PATH = "./helm/rabbit-app-chart"  // Adjusted path to the Helm chart
         RABBITMQ_RELEASE_NAME = "rabbitmq"
         RABBITMQ_CHART = "bitnami/rabbitmq"
         EXPORTER_DEPLOYMENT = "exporter-deployment.yaml"
