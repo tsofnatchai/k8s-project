@@ -1,8 +1,8 @@
 pipeline {
     agent any
     environment {
-        PRODUCER_IMAGE = 'tsofnatchai/k8s-project/producer'
-        CONSUMER_IMAGE = 'tsofnatchai/k8s-project/consumer'
+        PRODUCER_IMAGE = 'tsofnatg/producer'
+        CONSUMER_IMAGE = 'tsofnatg/consumer'
         REGISTRY_CREDENTIALS = 'docker-hub-credentials'
     }
     stages {
