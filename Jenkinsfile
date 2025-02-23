@@ -1,19 +1,16 @@
 pipeline {
     agent any
-
     environment {
         PRODUCER_IMAGE = 'tsofnatchai/producer'
         CONSUMER_IMAGE = 'tsofnatchai/consumer'
         REGISTRY_CREDENTIALS = 'docker-hub-credentials'
     }
-
     stages {
         stage('Clone Repository') {
             steps {
                 git branch: 'main', url: 'https://github.com/tsofnatchai/k8s-project.git'
             }
         }
-
         stage('Build Producer Image') {
             steps {
                 script {
@@ -21,7 +18,6 @@ pipeline {
                 }
             }
         }
-
         stage('Build Consumer Image') {
             steps {
                 script {
@@ -29,7 +25,6 @@ pipeline {
                 }
             }
         }
-
         stage('Push Producer Image') {
             steps {
                 script {
@@ -39,7 +34,6 @@ pipeline {
                 }
             }
         }
-
         stage('Push Consumer Image') {
             steps {
                 script {
@@ -50,11 +44,10 @@ pipeline {
             }
         }
     }
-
-//     post {
-//         cleanup {
-//             // Remove unused Docker images to free up space
-//             sh 'docker image prune -f'
-//         }
-//     }
+    post {
+        cleanup {
+            // Remove unused Docker images to free up space
+            sh 'docker image prune -f'
+        }
+    }
 }
