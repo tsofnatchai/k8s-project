@@ -28,7 +28,7 @@ rabbitmq:
 serviceAccount:
   create: true
 ingress:
-  enabled: true
+  enabled: false
 hpa:
   enabled: true
 autoscaling:
