@@ -44,11 +44,10 @@ pipeline {
             }
         }
         stage('Clean Up Docker Images') {
-                    steps {
-                        bat 'docker image prune -f'  // Windows agent
-                        // sh 'docker image prune -f'  // Linux/Mac agent
-                    }
-                }
+            steps {
+                bat 'docker image prune -f'  // Windows agent
+                // sh 'docker image prune -f'  // Linux/Mac agent
+            }
         }
     }
 //     post {
