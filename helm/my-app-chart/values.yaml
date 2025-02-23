@@ -29,3 +29,5 @@ serviceAccount:
   create: true
 ingress:
   enabled: true
+hpa:
+  enabled: true
