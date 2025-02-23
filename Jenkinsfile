@@ -45,6 +45,14 @@ pipeline {
                 }
             }
         }
+        stage('Configure Kubernetes Access') {
+            steps {
+                script {
+                    bat "kubectl config view"  // Verify Kube config
+                    bat "kubectl get nodes"    // Verify connection to cluster
+                }
+            }
+        }
         stage('Deploy Producer Application') {
             steps {
                 script {
