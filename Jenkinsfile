@@ -46,15 +46,7 @@ pipeline {
         stage('Clean Up Docker Images') {
             steps {
                 bat 'docker image prune -f'  // Windows agent
-                // sh 'docker image prune -f'  // Linux/Mac agent
             }
         }
     }
-//     post {
-//         cleanup {
-//             // Remove unused Docker images to free up space
-//             //sh 'docker image prune -f'
-//             bat 'docker image prune -f'
-//         }
-//     }
 }

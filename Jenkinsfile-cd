@@ -2,33 +2,54 @@ pipeline {
     agent any
 
     environment {
-        KUBECONFIG = "~/.kube/config"  // Update this to your Kubernetes config file path
-        HELM_RELEASE_NAME = "rmq-app"
-        HELM_CHART_PATH = "./helm"
+        KUBECONFIG = "~/.kube/config"  // Update this with the actual path to your Kube config file
+        HELM_RELEASE_NAME = "k8s-project-release"   // Your Helm release name
+        HELM_CHART_PATH = "./helm"     // Path to your Helm charts
+        HELM_VALUES_FILE = "values.yaml" // Path to your Helm values file
     }
 
     stages {
-        stage('Checkout Helm Charts') {
+        stage('Checkout Helm Charts Repository') {
             steps {
-                git url: 'https://github.com/avielb/rmqp-example.git', branch: 'main'
+                // Checkout the Helm charts repository
+                git url: 'https://bitnami.com/stack/rabbitmq/helm', branch: 'main'
             }
         }
 
-        stage('Connect to Kubernetes') {
+        stage('Define Connectivity to Kubernetes') {
             steps {
                 script {
-                    sh "export KUBECONFIG=${KUBECONFIG}"
-                    sh "kubectl get nodes"  // Verify connection
+                    // Set the KUBECONFIG environment variable if not already set in Jenkins
+                    sh 'echo $KUBECONFIG'
+
+                    // Verify connectivity by fetching cluster nodes
+                    sh 'kubectl get nodes'
                 }
             }
         }
 
-        stage('Deploy Application using Helm') {
+        stage('Deploy with Helm') {
             steps {
                 script {
-                    sh "helm upgrade --install ${HELM_RELEASE_NAME} ${HELM_CHART_PATH} --values values.yaml"
+                    // Ensure Docker images are tagged before upgrading the deployment
+                    // E.g., You can pull the latest image or build and tag it
+                    // sh 'docker pull your-docker-image:latest'
+                    // sh 'docker tag your-docker-image:latest your-docker-image:latest'
+
+                    // Deploy the latest application image using Helm upgrade
+                    sh "helm upgrade --install ${HELM_RELEASE_NAME} ${HELM_CHART_PATH} --values ${HELM_VALUES_FILE}"
                 }
             }
+        }
+    }
+
+    post {
+        success {
+            echo 'Deployment successful!'
+        }
+
+        failure {
+            echo 'Deployment failed.'
         }
     }
 }
