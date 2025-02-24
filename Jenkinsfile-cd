@@ -29,11 +29,13 @@ pipeline {
         stage('Deploy Application using Helm') {
             steps {
                 script {
+                    bat helm upgrade --install rabbitmq bitnami/rabbitmq \
+                                  --set auth.username=tsofnat \
+                                  --set auth.password=Guliguli1 \
                     bat "helm upgrade --install ${HELM_RELEASE_NAME} ${HELM_CHART_PATH} --values ${HELM_CHART_PATH}/values.yaml"
                 }
             }
         }
-
         stage('Deploy RabbitMQ') {
             steps {
                 script {
