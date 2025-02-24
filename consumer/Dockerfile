@@ -4,5 +4,5 @@ WORKDIR /app
 ADD consumer.py /app
 ADD requirements.txt /app
 RUN pip install --requirement /app/requirements.txt
-CMD ["python", "consumer.py", "-p", "5672", "-s", "rabbitmq"]
+CMD ["python", "consumer.py", "-p", "15672", "-s", "rabbitmq"]
 
