@@ -22,7 +22,7 @@ rabbitmq:
   exporters: "exchange,node,overview,queue"
   output_format: "TTY"
   timeout: 30
-  max_queues: 0
+  max_queues: 20
   excludeMetrics: ""
   connection: "direct"
 serviceAccount:
