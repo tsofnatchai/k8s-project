@@ -14,8 +14,11 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser(formatter_class=RawTextHelpFormatter,
                                  description='Run consumer.py',
                                  epilog=examples)
-    parser.add_argument('-p', '--port', action='store', dest='port', help='The port to listen on.')
-    parser.add_argument('-s', '--server', action='store', dest='server', help='The RabbitMQ server.')
+    parser.add_argument('-p', '--port', action='store', dest='port', default='5672', help='The port to listen on.')
+    parser.add_argument('-s', '--server', action='store', dest='server', default='rabbitmq', help='The RabbitMQ server.')
+
+    #parser.add_argument('-p', '--port', action='store', dest='port', help='The port to listen on.')
+    #parser.add_argument('-s', '--server', action='store', dest='server', help='The RabbitMQ server.')
 
     args = parser.parse_args()
     if args.port == None:
