@@ -38,7 +38,8 @@ if __name__ == '__main__':
     connection = pika.BlockingConnection(parameters)
     channel = connection.channel()
 
-    channel.queue_declare('pc')
+    #channel.queue_declare('pc')
+    channel.queue_declare(queue='pc', durable=True)
     channel.basic_consume(on_message, 'pc')
 
     try:

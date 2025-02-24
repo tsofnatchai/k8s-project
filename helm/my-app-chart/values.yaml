@@ -10,7 +10,7 @@ service:
   port: 9419
 
 rabbitmq:
-  url: http://localhost:15672
+  url: http://rabbitmq:15672
   user: tsofnat
   password: Guliguli1
   capabilities: bert,no_sort

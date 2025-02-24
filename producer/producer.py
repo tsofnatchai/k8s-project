@@ -26,6 +26,8 @@ if __name__ == '__main__':
     logging.basicConfig(level=logging.INFO)
     LOG = logging.getLogger(__name__)
     #credentials = pika.PlainCredentials('guest', 'guest')
+    #import os
+    #credentials = pika.PlainCredentials(os.getenv('RABBITMQ_USER', 'guest'), os.getenv('RABBITMQ_PASS', 'guest'))
     credentials = pika.PlainCredentials('tsofnat', 'Guliguli1')
     parameters = pika.ConnectionParameters(args.server,
                                            int(args.port),
@@ -33,7 +35,8 @@ if __name__ == '__main__':
                                            credentials)
     connection = pika.BlockingConnection(parameters)
     channel = connection.channel()
-    q = channel.queue_declare('pc')
+    #q = channel.queue_declare('pc')
+    q = channel.queue_declare(queue='pc', durable=True)
     q_name = q.method.queue
 
     # Turn on delivery confirmations
