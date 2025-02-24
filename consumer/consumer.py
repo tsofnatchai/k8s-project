@@ -3,9 +3,8 @@ from argparse import RawTextHelpFormatter
 from time import sleep
 
 def on_message(channel, method_frame, header_frame, body):
-    print method_frame.delivery_tag
-    print body
-    print
+    print(method_frame.delivery_tag)
+    print(body)
     LOG.info('Message has been received %s', body)
     channel.basic_ack(delivery_tag=method_frame.delivery_tag)
 
@@ -20,10 +19,10 @@ if __name__ == '__main__':
 
     args = parser.parse_args()
     if args.port == None:
-        print "Missing required argument: -p/--port"
+        print("Missing required argument: -p/--port")
         sys.exit(1)
     if args.server == None:
-        print "Missing required argument: -s/--server"
+        print("Missing required argument: -s/--server")
         sys.exit(1)
 
     # sleep a few seconds to allow RabbitMQ server to come up
