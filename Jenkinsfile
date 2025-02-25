@@ -85,15 +85,15 @@ pipeline {
          stage('Delete Existing Consumer Deployment') {
              steps {
                  script {
-                     // Delete the existing consumer deployment
-                     bat "kubectl delete deployment release-consumer-my-app-chart --force --grace-period=0"
-
-                     // Check if the deployment exists before trying to remove annotations
+                     // Check if the consumer deployment exists
                      def deploymentExists = bat(script: "kubectl get deployment release-consumer-my-app-chart --ignore-not-found -o name", returnStatus: true) == 0
 
-                     // Remove annotations if the deployment exists
+                     // If the deployment exists, delete it forcefully and remove annotations
                      if (deploymentExists) {
+                         bat "kubectl delete deployment release-consumer-my-app-chart --force --grace-period=0"
                          bat "kubectl annotate deployment release-consumer-my-app-chart meta.helm.sh/release-name- --force"
+                     } else {
+                         echo "Deployment release-consumer-my-app-chart not found. Skipping deletion."
                      }
                  }
              }
