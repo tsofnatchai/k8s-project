@@ -81,12 +81,13 @@ pipeline {
             }
         }
 
-        // Force delete existing consumer deployment to avoid ownership conflict
-        stage('Delete Existing Consumer Deployment') {
+         // Force delete existing consumer deployment and remove Helm annotations
+        stage('Force Delete Existing Consumer Deployment') {
             steps {
                 script {
-                    // Delete the existing consumer deployment and force remove any Helm ownership metadata
-                    bat "kubectl delete deployment release-consumer-my-app-chart --force --grace-period=0 --ignore-not-found"
+                    // Force delete the consumer deployment and remove Helm annotations
+                    bat "kubectl delete deployment release-consumer-my-app-chart --force --grace-period=0"
+                    bat "kubectl annotate deployment release-consumer-my-app-chart meta.helm.sh/release-name- --ignore-not-found"
                 }
             }
         }
