@@ -81,12 +81,12 @@ pipeline {
             }
         }
 
-        // Delete the existing consumer deployment to avoid ownership conflict
+        // Force delete existing consumer deployment to avoid ownership conflict
         stage('Delete Existing Consumer Deployment') {
             steps {
                 script {
-                    // Delete the existing consumer deployment before deploying the new one
-                    bat "helm uninstall release-consumer --namespace default --ignore-not-found"
+                    // Delete the existing consumer deployment and force remove any Helm ownership metadata
+                    bat "kubectl delete deployment release-consumer-my-app-chart --force --grace-period=0"
                 }
             }
         }
