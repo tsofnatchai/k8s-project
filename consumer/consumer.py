@@ -18,9 +18,6 @@ if __name__ == '__main__':
     parser.add_argument('-p', '--port', action='store', dest='port', default='5672', help='The port to listen on.')
     parser.add_argument('-s', '--server', action='store', dest='server', default='rabbitmq', help='The RabbitMQ server.')
 
-    #parser.add_argument('-p', '--port', action='store', dest='port', help='The port to listen on.')
-    #parser.add_argument('-s', '--server', action='store', dest='server', help='The RabbitMQ server.')
-
     args = parser.parse_args()
     if args.port == None:
         print("Missing required argument: -p/--port")
@@ -33,8 +30,6 @@ if __name__ == '__main__':
     sleep(10)
     logging.basicConfig(level=logging.INFO)
     LOG = logging.getLogger(__name__)
-    #credentials = pika.PlainCredentials('guest', 'guest')
-    #credentials = pika.PlainCredentials('tsofnat', 'Guliguli1')
     # Get RabbitMQ credentials from environment variables
     rabbitmq_user = os.getenv('RABBITMQ_USER', 'guest')  # Default to 'guest' if not set
     rabbitmq_password = os.getenv('RABBITMQ_PASSWORD', 'guest')  # Default to 'guest' if not set
@@ -46,7 +41,6 @@ if __name__ == '__main__':
     connection = pika.BlockingConnection(parameters)
     channel = connection.channel()
 
-    #channel.queue_declare('pc')
     channel.queue_declare(queue='pc', durable=True)
     channel.basic_consume(on_message, 'pc')
 

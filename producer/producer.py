@@ -1,6 +1,7 @@
 import pika, logging, sys, argparse
 from argparse import RawTextHelpFormatter
 from time import sleep
+import os
 
 if __name__ == '__main__':
     examples = sys.argv[0] + " -p 5672 -s rabbitmq -m 'Hello' "
@@ -10,8 +11,6 @@ if __name__ == '__main__':
     parser.add_argument('-p', '--port', action='store', dest='port', default='5672', help='The port to listen on.')
     parser.add_argument('-s', '--server', action='store', dest='server', default='rabbitmq', help='The RabbitMQ server.')
 
-    #parser.add_argument('-p', '--port', action='store', dest='port', help='The port to listen on.')
-    #parser.add_argument('-s', '--server', action='store', dest='server', help='The RabbitMQ server.')
     parser.add_argument('-m', '--message', action='store', dest='message', help='The message to send', required=False, default='Hello')
     parser.add_argument('-r', '--repeat', action='store', dest='repeat', help='Number of times to repeat the message', required=False, default='30')
 
@@ -28,17 +27,15 @@ if __name__ == '__main__':
 
     logging.basicConfig(level=logging.INFO)
     LOG = logging.getLogger(__name__)
-    #credentials = pika.PlainCredentials('guest', 'guest')
-    #import os
-    #credentials = pika.PlainCredentials(os.getenv('RABBITMQ_USER', 'guest'), os.getenv('RABBITMQ_PASS', 'guest'))
-    credentials = pika.PlainCredentials('tsofnat', 'Guliguli1')
+    rabbitmq_user = os.getenv('RABBITMQ_USER', 'guest')  # Default to 'guest' if not set
+    rabbitmq_password = os.getenv('RABBITMQ_PASSWORD', 'guest')  # Default to 'guest' if not set
+    credentials = pika.PlainCredentials(rabbitmq_user, rabbitmq_password)
     parameters = pika.ConnectionParameters(args.server,
                                            int(args.port),
                                            '/',
                                            credentials)
     connection = pika.BlockingConnection(parameters)
     channel = connection.channel()
-    #q = channel.queue_declare('pc')
     q = channel.queue_declare(queue='pc', durable=True)
     q_name = q.method.queue
 
