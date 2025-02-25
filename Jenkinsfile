@@ -71,18 +71,18 @@ pipeline {
                 }
             }
         }
-        stage('Deploy Producer Application') {
-            steps {
-                script {
-                    bat "helm upgrade --install ${HELM_RELEASE_NAME_PRODUCER} ${HELM_CHART_PATH} --set image.repository=${PRODUCER_IMAGE} --set image.tag=latest --values ${HELM_CHART_PATH}/values.yaml"
-                }
-            }
-        }
         stage('Uninstall Old Producer Release') {
             steps {
                 script {
                     // Uninstall the old producer release before deploying the consumer
                     bat "helm uninstall release-producer --namespace default"
+                }
+            }
+        }
+        stage('Deploy Producer Application') {
+            steps {
+                script {
+                    bat "helm upgrade --install ${HELM_RELEASE_NAME_PRODUCER} ${HELM_CHART_PATH} --set image.repository=${PRODUCER_IMAGE} --set image.tag=latest --values ${HELM_CHART_PATH}/values.yaml"
                 }
             }
         }
