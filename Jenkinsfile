@@ -81,16 +81,23 @@ pipeline {
             }
         }
 
-         // Force delete existing consumer deployment and remove Helm annotations
-        stage('Force Delete Existing Consumer Deployment') {
-            steps {
-                script {
-                    // Force delete the consumer deployment and remove Helm annotations
-                    bat "kubectl delete deployment release-consumer-my-app-chart --force --grace-period=0 --ignore-not-found"
-                    bat "kubectl annotate deployment release-consumer-my-app-chart meta.helm.sh/release-name- --ignore-not-found"
-                }
-            }
-        }
+         // Force delete existing consumer deployment to avoid ownership conflict
+         stage('Delete Existing Consumer Deployment') {
+             steps {
+                 script {
+                     // Delete the existing consumer deployment
+                     bat "kubectl delete deployment release-consumer-my-app-chart --force --grace-period=0"
+
+                     // Check if the deployment exists before trying to remove annotations
+                     def deploymentExists = bat(script: "kubectl get deployment release-consumer-my-app-chart --ignore-not-found -o name", returnStatus: true) == 0
+
+                     // Remove annotations if the deployment exists
+                     if (deploymentExists) {
+                         bat "kubectl annotate deployment release-consumer-my-app-chart meta.helm.sh/release-name- --force"
+                     }
+                 }
+             }
+         }
 
         // Deploy producer application
         stage('Deploy Producer Application') {
