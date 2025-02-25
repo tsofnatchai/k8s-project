@@ -86,7 +86,7 @@ pipeline {
             steps {
                 script {
                     // Force delete the consumer deployment and remove Helm annotations
-                    bat "kubectl delete deployment release-consumer-my-app-chart --force --grace-period=0"
+                    bat "kubectl delete deployment release-consumer-my-app-chart --force --grace-period=0 --ignore-not-found"
                     bat "kubectl annotate deployment release-consumer-my-app-chart meta.helm.sh/release-name- --ignore-not-found"
                 }
             }
