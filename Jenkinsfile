@@ -85,7 +85,7 @@ pipeline {
          stage('Delete Existing Consumer Deployment') {
              steps {
                  script {
-                     // Check if the consumer deployment exists
+                     // Check if the deployment exists
                      def deploymentExists = bat(script: "kubectl get deployment release-consumer-my-app-chart --ignore-not-found -o name", returnStatus: true) == 0
 
                      // If the deployment exists, delete it forcefully and remove annotations
@@ -98,6 +98,7 @@ pipeline {
                  }
              }
          }
+
 
         // Deploy producer application
         stage('Deploy Producer Application') {
