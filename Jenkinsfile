@@ -55,6 +55,14 @@ pipeline {
                 }
             }
         }
+        stage('Clean Up ConfigMap') {
+            steps {
+                script {
+                    // Delete the existing rabbitmq-config before deploying the consumer
+                    sh "kubectl delete configmap rabbitmq-config"
+                }
+            }
+        }
         stage('Deploy Producer Application') {
             steps {
                 script {
