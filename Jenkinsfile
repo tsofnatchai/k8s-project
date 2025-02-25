@@ -71,6 +71,7 @@ pipeline {
                 }
             }
         }
+        // Uninstall old producer release (if exists)
         stage('Uninstall Old Producer Release') {
             steps {
                 script {
@@ -78,13 +79,7 @@ pipeline {
                 }
             }
         }
-        stage('Uninstall Old Consumer Release') {
-            steps {
-                script {
-                    bat "helm uninstall release-consumer --namespace default --ignore-not-found"
-                }
-            }
-        }
+        // Deploy producer application
         stage('Deploy Producer Application') {
             steps {
                 script {
@@ -92,6 +87,15 @@ pipeline {
                 }
             }
         }
+        // Clean up old consumer release (if exists)
+        stage('Uninstall Old Consumer Release') {
+            steps {
+                script {
+                    bat "helm uninstall release-consumer --namespace default --ignore-not-found"
+                }
+            }
+        }
+        // Deploy consumer application
         stage('Deploy Consumer Application') {
             steps {
                 script {
