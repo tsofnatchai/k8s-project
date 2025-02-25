@@ -25,6 +25,16 @@ spec:
               value: "rabbitmq"  # RabbitMQ service name in Kubernetes
             - name: RABBITMQ_PORT
               value: "5672"
+            - name: RABBITMQ_USER
+              valueFrom:
+                configMapKeyRef:
+                  name: rabbitmq-config  # Assuming you define RabbitMQ user and password in a ConfigMap
+                  key: user
+            - name: RABBITMQ_PASSWORD
+              valueFrom:
+                configMapKeyRef:
+                  name: rabbitmq-config  # Assuming you define RabbitMQ user and password in a ConfigMap
+                  key: password
           command: ["python", "consumer.py", "-p", "5672", "-s", "rabbitmq"]
           resources:
             requests:

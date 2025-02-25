@@ -1,6 +1,7 @@
 import pika, logging, sys, argparse, time
 from argparse import RawTextHelpFormatter
 from time import sleep
+import os
 
 def on_message(channel, method_frame, header_frame, body):
     print(method_frame.delivery_tag)
@@ -33,7 +34,11 @@ if __name__ == '__main__':
     logging.basicConfig(level=logging.INFO)
     LOG = logging.getLogger(__name__)
     #credentials = pika.PlainCredentials('guest', 'guest')
-    credentials = pika.PlainCredentials('tsofnat', 'Guliguli1')
+    #credentials = pika.PlainCredentials('tsofnat', 'Guliguli1')
+    # Get RabbitMQ credentials from environment variables
+    rabbitmq_user = os.getenv('RABBITMQ_USER', 'guest')  # Default to 'guest' if not set
+    rabbitmq_password = os.getenv('RABBITMQ_PASSWORD', 'guest')  # Default to 'guest' if not set
+    credentials = pika.PlainCredentials(rabbitmq_user, rabbitmq_password)
     parameters = pika.ConnectionParameters(args.server,
                                            int(args.port),
                                            '/',
