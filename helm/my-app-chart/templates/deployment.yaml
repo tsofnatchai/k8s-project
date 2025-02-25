@@ -22,7 +22,7 @@ spec:
             - containerPort: 5672  # RabbitMQ communication port
           env:
             - name: RABBITMQ_HOST
-              value: "rabbitmq"  # Ensure this is the correct RabbitMQ service name in Kubernetes
+              value: "rabbitmq"  # RabbitMQ service name in Kubernetes
             - name: RABBITMQ_PORT
               value: "5672"
           command: ["python", "consumer.py", "-p", "5672", "-s", "rabbitmq"]
@@ -59,7 +59,7 @@ spec:
             - containerPort: 5672  # RabbitMQ communication port
           env:
             - name: RABBITMQ_HOST
-              value: "rabbitmq"  # Ensure this is the correct RabbitMQ service name in Kubernetes
+              value: "rabbitmq"  # RabbitMQ service name in Kubernetes
             - name: RABBITMQ_PORT
               value: "5672"
           command: ["python", "producer.py", "-p", "5672", "-s", "rabbitmq", "-m", "Hello", "-r", "30"]
