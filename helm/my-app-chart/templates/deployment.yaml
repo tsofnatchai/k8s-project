@@ -72,6 +72,16 @@ spec:
               value: "rabbitmq"  # RabbitMQ service name in Kubernetes
             - name: RABBITMQ_PORT
               value: "5672"
+            - name: RABBITMQ_USER
+              valueFrom:
+                configMapKeyRef:
+                  name: rabbitmq-config-{{ .Release.Name }}  # Assuming you define RabbitMQ user and password in a ConfigMap
+                  key: user
+            - name: RABBITMQ_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: rabbitmq-secret-{{ .Release.Name }}  # Unique Secret for each release
+                  key: password
           command: ["python", "producer.py", "-p", "5672", "-s", "rabbitmq", "-m", "Hello", "-r", "30"]
           resources:
             requests:
