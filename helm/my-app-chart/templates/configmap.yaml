@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: rabbitmq-config
+  name: rabbitmq-config-{{ .Release.Name }}  # Unique name for each release
 data:
   user: {{ .Values.rabbitmq.user }}
   password: {{ .Values.rabbitmq.password }}

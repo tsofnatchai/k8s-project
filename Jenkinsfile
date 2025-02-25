@@ -67,7 +67,7 @@ pipeline {
             steps {
                 script {
                     // Delete the existing rabbitmq-secret before deploying the consumer
-                    bat "kubectl delete secret rabbitmq-secret"
+                    bat "kubectl delete secret rabbitmq-secret --ignore-not-found"
                 }
             }
         }
