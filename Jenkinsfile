@@ -63,6 +63,14 @@ pipeline {
                 }
             }
         }
+        stage('Clean Up Secret') {
+            steps {
+                script {
+                    // Delete the existing rabbitmq-secret before deploying the consumer
+                    bat "kubectl delete secret rabbitmq-secret"
+                }
+            }
+        }
         stage('Deploy Producer Application') {
             steps {
                 script {
