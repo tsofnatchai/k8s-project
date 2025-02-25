@@ -86,7 +86,7 @@ pipeline {
             steps {
                 script {
                     // Delete the existing consumer deployment before deploying the new one
-                    bat "kubectl delete deployment release-consumer-my-app-chart --ignore-not-found"
+                    bat "helm uninstall release-consumer --namespace default --ignore-not-found"
                 }
             }
         }
