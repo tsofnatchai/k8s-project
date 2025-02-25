@@ -5,7 +5,8 @@ pipeline {
         PRODUCER_IMAGE = 'tsofnatg/producer'
         CONSUMER_IMAGE = 'tsofnatg/consumer'
         REGISTRY_CREDENTIALS = 'docker-hub-credentials'
-        HELM_RELEASE_NAME = "release"
+        HELM_RELEASE_NAME_PRODUCER = "release-producer"   // Unique release name for producer
+        HELM_RELEASE_NAME_CONSUMER = "release-consumer"   // Unique release name for consumer
         HELM_CHART_PATH = "./helm/my-app-chart"  // Adjusted path to the Helm chart
     }
     stages {
@@ -57,14 +58,14 @@ pipeline {
         stage('Deploy Producer Application') {
             steps {
                 script {
-                    bat "helm upgrade --install ${HELM_RELEASE_NAME}-producer ${HELM_CHART_PATH} --set image.repository=${PRODUCER_IMAGE} --set image.tag=latest --values ${HELM_CHART_PATH}/values.yaml"
+                    bat "helm upgrade --install ${HELM_RELEASE_NAME_PRODUCER} ${HELM_CHART_PATH} --set image.repository=${PRODUCER_IMAGE} --set image.tag=latest --values ${HELM_CHART_PATH}/values.yaml"
                 }
             }
         }
         stage('Deploy Consumer Application') {
             steps {
                 script {
-                    bat "helm upgrade --install ${HELM_RELEASE_NAME}-consumer ${HELM_CHART_PATH} --set image.repository=${CONSUMER_IMAGE} --set image.tag=latest --values ${HELM_CHART_PATH}/values.yaml"
+                    bat "helm upgrade --install ${HELM_RELEASE_NAME_CONSUMER} ${HELM_CHART_PATH} --set image.repository=${CONSUMER_IMAGE} --set image.tag=latest --values ${HELM_CHART_PATH}/values.yaml"
                 }
             }
         }
