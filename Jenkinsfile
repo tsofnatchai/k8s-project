@@ -78,6 +78,14 @@ pipeline {
                 }
             }
         }
+        stage('Uninstall Old Producer Release') {
+            steps {
+                script {
+                    // Uninstall the old producer release before deploying the consumer
+                    bat "helm uninstall release-producer --namespace default"
+                }
+            }
+        }
         stage('Deploy Consumer Application') {
             steps {
                 script {
