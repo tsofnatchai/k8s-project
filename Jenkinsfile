@@ -71,6 +71,7 @@ pipeline {
                 }
             }
         }
+
         // Uninstall old producer release (if exists)
         stage('Uninstall Old Producer Release') {
             steps {
@@ -79,6 +80,17 @@ pipeline {
                 }
             }
         }
+
+        // Delete the existing consumer deployment to avoid ownership conflict
+        stage('Delete Existing Consumer Deployment') {
+            steps {
+                script {
+                    // Delete the existing consumer deployment before deploying the new one
+                    bat "kubectl delete deployment release-consumer-my-app-chart --ignore-not-found"
+                }
+            }
+        }
+
         // Deploy producer application
         stage('Deploy Producer Application') {
             steps {
@@ -87,14 +99,7 @@ pipeline {
                 }
             }
         }
-        // Clean up old consumer release (if exists)
-        stage('Uninstall Old Consumer Release') {
-            steps {
-                script {
-                    bat "helm uninstall release-consumer --namespace default --ignore-not-found"
-                }
-            }
-        }
+
         // Deploy consumer application
         stage('Deploy Consumer Application') {
             steps {
@@ -103,6 +108,7 @@ pipeline {
                 }
             }
         }
+
         stage('Clean Up Docker Images') {
             steps {
                 bat 'docker image prune -f'  // Windows agent
