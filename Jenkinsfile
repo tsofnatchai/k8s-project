@@ -59,7 +59,7 @@ pipeline {
             steps {
                 script {
                     // Delete the existing rabbitmq-config before deploying the consumer
-                    bat "kubectl delete configmap rabbitmq-config"
+                    bat "kubectl delete configmap rabbitmq-config --ignore-not-found"
                 }
             }
         }
