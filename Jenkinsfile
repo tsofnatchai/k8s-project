@@ -74,14 +74,14 @@ pipeline {
         stage('Uninstall Old Producer Release') {
             steps {
                 script {
-                    bat "helm uninstall release-producer --namespace default"
+                    bat "helm uninstall release-producer --namespace default --ignore-not-found"
                 }
             }
         }
         stage('Uninstall Old Consumer Release') {
             steps {
                 script {
-                    bat "helm uninstall release-consumer --namespace default"
+                    bat "helm uninstall release-consumer --namespace default --ignore-not-found"
                 }
             }
         }
