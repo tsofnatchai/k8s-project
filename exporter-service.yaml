@@ -2,13 +2,9 @@ apiVersion: v1
 kind: Service
 metadata:
   name: rabbitmq-exporter
-  labels:
-    app: rabbitmq-exporter
 spec:
+  ports:
+    - port: 9419  # Metrics port
+      targetPort: 9419
   selector:
     app: rabbitmq-exporter
-  ports:
-    - protocol: TCP
-      port: 9419
-      targetPort: 9419
-  type: ClusterIP

@@ -16,9 +16,18 @@ spec:
     spec:
       containers:
         - name: rabbitmq-exporter
-          image: kbudde/rabbitmq-exporter
+          image: kbudde/rabbitmq-exporter:v0.29.0
           ports:
-            - containerPort: 9419
+            - containerPort: 9419  # Port for exposing metrics
           env:
-            - name: RABBIT_URL
-              value: "http://rabbitmq:15672"
+            - name: RABBITMQ_HOST
+              value: "rabbitmq"  # RabbitMQ service name in the cluster
+            - name: RABBITMQ_PORT
+              value: "15672"  # Management port for RabbitMQ
+          resources:
+            requests:
+              memory: "64Mi"
+              cpu: "250m"
+            limits:
+              memory: "128Mi"
+              cpu: "500m"
