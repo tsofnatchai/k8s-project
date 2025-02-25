@@ -86,7 +86,7 @@ pipeline {
             steps {
                 script {
                     // Delete the existing consumer deployment and force remove any Helm ownership metadata
-                    bat "kubectl delete deployment release-consumer-my-app-chart --force --grace-period=0"
+                    bat "kubectl delete deployment release-consumer-my-app-chart --force --grace-period=0 --ignore-not-found"
                 }
             }
         }
