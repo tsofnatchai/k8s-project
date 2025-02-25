@@ -82,22 +82,23 @@ pipeline {
         }
 
          // Force delete existing consumer deployment to avoid ownership conflict
-         stage('Delete Existing Consumer Deployment') {
-             steps {
-                 script {
-                     // Check if the deployment exists
-                     def deploymentExists = bat(script: "kubectl get deployment release-consumer-my-app-chart --ignore-not-found -o name", returnStatus: true) == 0
+        stage('Delete Existing Consumer Deployment') {
+            steps {
+                script {
+                    // Check if the deployment exists using kubectl
+                    def deploymentExists = bat(script: "kubectl get deployment release-consumer-my-app-chart --ignore-not-found -o name", returnStatus: true) == 0
 
-                     // If the deployment exists, delete it forcefully and remove annotations
-                     if (deploymentExists) {
-                         bat "kubectl delete deployment release-consumer-my-app-chart --force --grace-period=0"
-                         bat "kubectl annotate deployment release-consumer-my-app-chart meta.helm.sh/release-name- --force"
-                     } else {
-                         echo "Deployment release-consumer-my-app-chart not found. Skipping deletion."
-                     }
-                 }
-             }
-         }
+                    // If the deployment exists, delete it and remove Helm annotations
+                    if (deploymentExists) {
+                        bat "kubectl delete deployment release-consumer-my-app-chart --force --grace-period=0"
+                        bat "kubectl annotate deployment release-consumer-my-app-chart meta.helm.sh/release-name- --force"
+                        echo "Deployment deleted."
+                    } else {
+                        echo "Deployment release-consumer-my-app-chart not found. Skipping deletion."
+                    }
+                }
+            }
+        }
 
 
         // Deploy producer application
