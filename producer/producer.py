@@ -44,7 +44,8 @@ if __name__ == '__main__':
     # Turn on delivery confirmations
     channel.confirm_delivery()
 
-    for i in range(0, int(args.repeat)):
+    #for i in range(0, int(args.repeat)):
+    while True:
         if channel.basic_publish('', q_name, args.message):
             LOG.info('Message has been delivered')
         else:
