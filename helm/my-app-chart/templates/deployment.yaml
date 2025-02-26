@@ -34,10 +34,12 @@ spec:
       {{- end }}
       containers:
         - name: consumer
+          image: "{{ .Values.consumer_image.repository }}:{{ .Values.consumer_image.tag }}"
           ports:
             - containerPort: 5672  # RabbitMQ communication port
           command: ["python", "consumer.py", "-p", "5672", "-s", "rabbitmq"]
         - name: producer
+          image: "{{ .Values.producer_image.repository }}:{{ .Values.producer_image.tag }}"
           ports:
             - containerPort: 5672  # RabbitMQ communication port
           command: [ "python", "producer.py", "-p", "5672", "-s", "rabbitmq", "-m", "Hello", "-r", "30" ]
