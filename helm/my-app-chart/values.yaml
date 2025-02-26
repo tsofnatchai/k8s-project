@@ -4,6 +4,16 @@ image:
   repository: kbudde/rabbitmq-exporter
   tag: v0.29.0
   pullPolicy: Always
+# Producer and Consumer Image
+consumer_image:
+  repository: tsofnatg/consumer  # Your consumer image
+  tag: latest                    # Tag for the consumer image
+  pullPolicy: Always
+
+producer_image:
+  repository: tsofnatg/producer  # Your producer image
+  tag: latest                    # Tag for the producer image
+  pullPolicy: Always
 
 service:
   type: ClusterIP
