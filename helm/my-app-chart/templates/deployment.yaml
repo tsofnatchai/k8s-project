@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
         - name: consumer
-          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"#image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
           imagePullPolicy: Always
           ports:
             - containerPort: 5672  # RabbitMQ communication port
@@ -63,7 +63,7 @@ spec:
     spec:
       containers:
         - name: producer
-          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"#"{{ .Values.image.repository }}:{{ .Values.image.tag }}"
           imagePullPolicy: Always
           ports:
             - containerPort: 5672  # RabbitMQ communication port
