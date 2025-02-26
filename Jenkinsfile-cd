@@ -9,6 +9,10 @@ pipeline {
         RABBITMQ_CHART = "bitnami/rabbitmq"
         EXPORTER_DEPLOYMENT = "exporter-deployment.yaml"
         EXPORTER_SERVICE = "exporter-service.yaml"
+        PRODUCER_IMAGE = 'tsofnatg/producer'
+        CONSUMER_IMAGE = 'tsofnatg/consumer'
+        HELM_RELEASE_NAME_PRODUCER = "release-producer"   // Unique release name for producer
+        HELM_RELEASE_NAME_CONSUMER = "release-consumer"   // Unique release name for consumer
     }
 
     stages {
@@ -36,8 +40,31 @@ pipeline {
                 }
             }
         }
+        stage('Wait for RabbitMQ to be Ready') {
+            steps {
+                script {
+                    // Wait for RabbitMQ to be ready before continuing to deploy the consumer and producer
+                    bat "kubectl rollout status deployment/rabbitmq --timeout=5m"
+                }
+            }
+        }
+        // Deploy producer application
+        stage('Deploy Producer Application') {
+            steps {
+                script {
+                    bat "helm upgrade --install ${HELM_RELEASE_NAME_PRODUCER} ${HELM_CHART_PATH} --set image.repository=${PRODUCER_IMAGE} --set image.tag=latest --values ${HELM_CHART_PATH}/values.yaml"
+                }
+            }
+        }
 
-
+        // Deploy consumer application
+        stage('Deploy Consumer Application') {
+            steps {
+                script {
+                    bat "helm upgrade --install ${HELM_RELEASE_NAME_CONSUMER} ${HELM_CHART_PATH} --set image.repository=${CONSUMER_IMAGE} --set image.tag=latest --values ${HELM_CHART_PATH}/values.yaml"
+                }
+            }
+        }
 
         stage('Deploy RabbitMQ Exporter') {
             steps {

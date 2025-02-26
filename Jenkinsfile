@@ -101,23 +101,23 @@ pipeline {
 //         }
 
 
-        // Deploy producer application
-        stage('Deploy Producer Application') {
-            steps {
-                script {
-                    bat "helm upgrade --install ${HELM_RELEASE_NAME_PRODUCER} ${HELM_CHART_PATH} --set image.repository=${PRODUCER_IMAGE} --set image.tag=latest --values ${HELM_CHART_PATH}/values.yaml"
-                }
-            }
-        }
-
-        // Deploy consumer application
-        stage('Deploy Consumer Application') {
-            steps {
-                script {
-                    bat "helm upgrade --install ${HELM_RELEASE_NAME_CONSUMER} ${HELM_CHART_PATH} --set image.repository=${CONSUMER_IMAGE} --set image.tag=latest --values ${HELM_CHART_PATH}/values.yaml"
-                }
-            }
-        }
+//         // Deploy producer application
+//         stage('Deploy Producer Application') {
+//             steps {
+//                 script {
+//                     bat "helm upgrade --install ${HELM_RELEASE_NAME_PRODUCER} ${HELM_CHART_PATH} --set image.repository=${PRODUCER_IMAGE} --set image.tag=latest --values ${HELM_CHART_PATH}/values.yaml"
+//                 }
+//             }
+//         }
+//
+//         // Deploy consumer application
+//         stage('Deploy Consumer Application') {
+//             steps {
+//                 script {
+//                     bat "helm upgrade --install ${HELM_RELEASE_NAME_CONSUMER} ${HELM_CHART_PATH} --set image.repository=${CONSUMER_IMAGE} --set image.tag=latest --values ${HELM_CHART_PATH}/values.yaml"
+//                 }
+//             }
+//         }
 
         stage('Clean Up Docker Images') {
             steps {
