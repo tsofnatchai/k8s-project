@@ -21,8 +21,8 @@ service:
 
 rabbitmq:
   url: http://rabbitmq:15672
-  user: tsofnat
-  password: Guliguli1
+  #user: tsofnat
+  #password: Guliguli1
   capabilities: bert,no_sort
   include_queues: ".*"
   include_vhost: ".*"
