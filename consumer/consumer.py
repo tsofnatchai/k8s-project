@@ -33,15 +33,15 @@ if __name__ == '__main__':
     # Get RabbitMQ credentials from environment variables
     rabbitmq_user = os.getenv('RABBITMQ_USER', 'guest')  # Default to 'guest' if not set
     rabbitmq_password = os.getenv('RABBITMQ_PASSWORD', 'guest')  # Default to 'guest' if not set
-    # credentials = pika.PlainCredentials(rabbitmq_user, rabbitmq_password)
-    # parameters = pika.ConnectionParameters(args.server,
-    #                                        int(args.port),
-    #                                        '/',
-    #                                        credentials)
+    credentials = pika.PlainCredentials(rabbitmq_user, rabbitmq_password)
+    parameters = pika.ConnectionParameters(args.server,
+                                           int(args.port),
+                                           '/',
+                                           credentials)
     #credentials = pika.PlainCredentials('tsofnat', 'Guliguli1')
     #parameters = pika.ConnectionParameters('rabbitmq.default.svc.cluster.local', 5672, '/', credentials)
-    credentials = pika.PlainCredentials('tsofnat', 'Guliguli1')
-    parameters = pika.ConnectionParameters('rabbitmq', 5672, '/', credentials)
+    #credentials = pika.PlainCredentials('tsofnat', 'Guliguli1')
+    #parameters = pika.ConnectionParameters('rabbitmq', 5672, '/', credentials)
 
     connection = pika.BlockingConnection(parameters)
     channel = connection.channel()
