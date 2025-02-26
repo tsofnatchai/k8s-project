@@ -29,13 +29,13 @@ if __name__ == '__main__':
     LOG = logging.getLogger(__name__)
     rabbitmq_user = os.getenv('RABBITMQ_USER', 'guest')  # Default to 'guest' if not set
     rabbitmq_password = os.getenv('RABBITMQ_PASSWORD', 'guest')  # Default to 'guest' if not set
-    credentials = pika.PlainCredentials('tsofnat', 'Guliguli1')
-    parameters = pika.ConnectionParameters('rabbitmq', 5672, '/', credentials)
-    # credentials = pika.PlainCredentials(rabbitmq_user, rabbitmq_password)
-    # parameters = pika.ConnectionParameters(args.server,
-    #                                        int(args.port),
-    #                                        '/',
-    #                                        credentials)
+    #credentials = pika.PlainCredentials('tsofnat', 'Guliguli1')
+    #parameters = pika.ConnectionParameters('rabbitmq', 5672, '/', credentials)
+    credentials = pika.PlainCredentials(rabbitmq_user, rabbitmq_password)
+    parameters = pika.ConnectionParameters(args.server,
+                                           int(args.port),
+                                           '/',
+                                           credentials)
     connection = pika.BlockingConnection(parameters)
     channel = connection.channel()
     q = channel.queue_declare(queue='pc', durable=True)
