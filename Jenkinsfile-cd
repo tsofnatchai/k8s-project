@@ -44,7 +44,7 @@ pipeline {
             steps {
                 script {
                     // Wait for RabbitMQ to be ready before continuing to deploy the consumer and producer
-                    bat "kubectl rollout status deployment/rabbitmq --timeout=5m"
+                    bat "kubectl rollout status deployment/rabbitmq-0 --timeout=5m"
                 }
             }
         }
