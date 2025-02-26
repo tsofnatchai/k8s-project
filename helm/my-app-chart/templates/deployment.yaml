@@ -33,8 +33,20 @@ spec:
         {{- toYaml . | nindent 8 }}
       {{- end }}
       containers:
+        - name: consumer
+          ports:
+            - containerPort: 5672  # RabbitMQ communication port
+          command: ["python", "consumer.py", "-p", "5672", "-s", "rabbitmq"]
+        - name: producer
+          ports:
+            - containerPort: 5672  # RabbitMQ communication port
+          command: [ "python", "producer.py", "-p", "5672", "-s", "rabbitmq", "-m", "Hello", "-r", "30" ]
+
+
+
         - name: {{ .Chart.Name }}
           {{- with .Values.securityContext }}
+
           securityContext:
             {{- toYaml . | nindent 12 }}
           {{- end }}
