@@ -80,45 +80,6 @@ pipeline {
                 }
             }
         }
-
-         // Force delete existing consumer deployment to avoid ownership conflict
-//         stage('Delete Existing Consumer Deployment') {
-//             steps {
-//                 script {
-//                     // Check if the deployment exists using kubectl
-//                     def deploymentExists = bat(script: "kubectl get deployment release-consumer-my-app-chart --ignore-not-found -o name", returnStatus: true) == 0
-//
-//                     // If the deployment exists, delete it and remove Helm annotations
-//                     if (deploymentExists) {
-//                         bat "kubectl delete deployment release-consumer-my-app-chart --force --grace-period=0"
-//                         bat "kubectl annotate deployment release-consumer-my-app-chart meta.helm.sh/release-name- --force"
-//                         echo "Deployment deleted."
-//                     } else {
-//                         echo "Deployment release-consumer-my-app-chart not found. Skipping deletion."
-//                     }
-//                 }
-//             }
-//         }
-
-
-//         // Deploy producer application
-//         stage('Deploy Producer Application') {
-//             steps {
-//                 script {
-//                     bat "helm upgrade --install ${HELM_RELEASE_NAME_PRODUCER} ${HELM_CHART_PATH} --set image.repository=${PRODUCER_IMAGE} --set image.tag=latest --values ${HELM_CHART_PATH}/values.yaml"
-//                 }
-//             }
-//         }
-//
-//         // Deploy consumer application
-//         stage('Deploy Consumer Application') {
-//             steps {
-//                 script {
-//                     bat "helm upgrade --install ${HELM_RELEASE_NAME_CONSUMER} ${HELM_CHART_PATH} --set image.repository=${CONSUMER_IMAGE} --set image.tag=latest --values ${HELM_CHART_PATH}/values.yaml"
-//                 }
-//             }
-//         }
-
         stage('Clean Up Docker Images') {
             steps {
                 bat 'docker image prune -f'  // Windows agent

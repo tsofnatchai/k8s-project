@@ -29,8 +29,7 @@ if __name__ == '__main__':
     LOG = logging.getLogger(__name__)
     rabbitmq_user = os.getenv('RABBITMQ_USER', 'guest')  # Default to 'guest' if not set
     rabbitmq_password = os.getenv('RABBITMQ_PASSWORD', 'guest')  # Default to 'guest' if not set
-    #credentials = pika.PlainCredentials('tsofnat', 'Guliguli1')
-    #parameters = pika.ConnectionParameters('rabbitmq', 5672, '/', credentials)
+
     credentials = pika.PlainCredentials(rabbitmq_user, rabbitmq_password)
     parameters = pika.ConnectionParameters(args.server,
                                            int(args.port),
@@ -44,7 +43,6 @@ if __name__ == '__main__':
     # Turn on delivery confirmations
     channel.confirm_delivery()
 
-    #for i in range(0, int(args.repeat)):
     while True:
         if channel.basic_publish('', q_name, args.message):
             LOG.info('Message has been delivered')

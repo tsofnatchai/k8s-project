@@ -38,10 +38,6 @@ if __name__ == '__main__':
                                            int(args.port),
                                            '/',
                                            credentials)
-    #credentials = pika.PlainCredentials('tsofnat', 'Guliguli1')
-    #parameters = pika.ConnectionParameters('rabbitmq.default.svc.cluster.local', 5672, '/', credentials)
-    #credentials = pika.PlainCredentials('tsofnat', 'Guliguli1')
-    #parameters = pika.ConnectionParameters('rabbitmq', 5672, '/', credentials)
 
     connection = pika.BlockingConnection(parameters)
     channel = connection.channel()
