@@ -35,7 +35,7 @@ spec:
                 secretKeyRef:
                   name: rabbitmq-secret-{{ .Release.Name }}  # Unique Secret for each release
                   key: password
-          command: ["python", "consumer.py", "-p", "5672", "-s", "rabbitmq"]
+          command: ["python", "/app/consumer.py", "-p", "5672", "-s", "rabbitmq"]
           resources:
             requests:
               memory: "64Mi"
